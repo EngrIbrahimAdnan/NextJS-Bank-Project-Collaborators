@@ -21,7 +21,7 @@ export default async function middleware(req) {
     return NextResponse.redirect(new URL("/register", req.nextUrl));
   }
 
-  //If page URL does neither exist (both public and privately), nor is Home page, redirect to home page
+  //If page URL does neither exist (both public and privately), nor is already at Home page (to prevent too many redirects), redirect to home page
   if (!isPublicRoute && !isPrivateRoute && !isHomePage) {
     return NextResponse.redirect(new URL("/", req.nextUrl));
   }
