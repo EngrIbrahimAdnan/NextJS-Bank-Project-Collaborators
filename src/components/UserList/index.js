@@ -1,42 +1,37 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+
+import dynamic from "next/dynamic";
 import UserCard from "./UserCard";
-
-import React from "react";
-
-import Link from "next/link";
+// Dynamic import to avoid hydration errors
+const UserCardLoader = dynamic(() => import("./UserCardLoader"), {
+  ssr: false,
+});
 
 function UserList({ users }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {users.map((user) => (
-        <div key={user._id}>
-          <div className="bg-white-700 p-4 border rounded-md  text-center text-white shadow-md hover:shadow-lg">
-            <img
-              src={
-                user.image
-                  ? `https://react-bank-project.eapi.joincoded.com/${user.image}`
-                  : "—Pngtree—user profile avatar_13369988.png"
-              }
-              alt={user.username}
-              className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 shadow-md"
-            />
+  const [loading, setLoading] = useState(true);
 
-            <h3 className="text-lg font-semibold text-black">
-              {user.username}
-            </h3>
-            <h3 className="text-lg font-semibold text-black">
-              <span>Balance: </span>
-              {user.balance}
-            </h3>
-            <Link
-              key={user._id}
-              href={`/profile/${user._id}`}
-              className="ml-2 px-2 py-1 text-black rounded-md hover:bg-green-600 transition-colors"
-            >
-              Transfer
-            </Link>
-          </div>
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <div className="bg-white-900 min-h-screen h-screen flex items-center justify-center inset-0 z-[-1]">
+      <div className="max-w-[90%] overflow-scroll w-full px-12 py-6 bg-white-800 rounded-md shadow-md hover:shadow-lg max-h-[80%]">
+        <h2 className="text-3xl text-black font-semibold mb-6">Users</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          {loading
+            ? Array.from({ length: 8 }).map((_, index) => (
+                <UserCardLoader key={index} />
+              ))
+            : users.map((user) => <UserCard key={user._id} user={user} />)}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

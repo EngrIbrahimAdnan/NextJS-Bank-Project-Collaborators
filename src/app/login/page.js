@@ -1,42 +1,23 @@
 "use client";
 
-import { login } from "@/api/actions/auth";
 import React, { startTransition } from "react";
 import Input from "@/components/Input";
 
+import { validateLoginForm } from "@/api/actions/auth";
+import { useActionState } from "react";
 import Image from "next/image";
 
-import loginImage from "../../../public/loginImg.jpg";
-
-import { loginWithValidation } from "@/api/actions/auth";
-import { useState, useActionState } from "react";
+import loginImage from "@/assets/loginImg.jpg";
 
 function LoginPage() {
-  const [state, action] = useActionState(loginWithValidation, undefined);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-
-    console.log(username, password);
-
-    startTransition(async () => {
-      const validationResult = await action(formData);
-    });
-
-    console.log(formData);
-
-    await login(username, password);
-  };
+  const [state, action, isPending] = useActionState(
+    validateLoginForm,
+    undefined
+  );
 
   return (
     <div className="">
-      <form onSubmit={handleSubmit} className="flex flex-col">
+      <form action={action} className="flex flex-col">
         <div className="flex items-center justify-center">
           <div className="flex h-screen w-screen">
             <div className="w-2/5 bg-grey-200 p-28 pr-98 pl-90">
@@ -50,8 +31,6 @@ function LoginPage() {
                 type="text"
                 placeholder="Username"
                 name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
                 required
               />
               {state?.errors?.name && <p>{state.errors.name}</p>}
@@ -61,8 +40,6 @@ function LoginPage() {
                 type="password"
                 placeholder="Password"
                 name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
               />
               {state?.errors?.password && (
@@ -75,14 +52,18 @@ function LoginPage() {
                   </ul>
                 </div>
               )}
+              {state?.error && (
+                <div>
+                  <p>{state.error}</p>
+                </div>
+              )}
               <div className="pt-4">
-                {" "}
                 <button
                   className="bg-red-600 hover:bg-red-800 transition duration-200 text-[--background] w-[100%] m-auto rounded-md p-2"
                   type="submit"
                 >
-                  Login
-                </button>{" "}
+                  {isPending ? "Logging in..." : "Login"}
+                </button>
               </div>
 
               <div className="p-2">

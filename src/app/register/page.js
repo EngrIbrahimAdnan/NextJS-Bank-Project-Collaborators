@@ -1,40 +1,23 @@
 "use client";
-import { register, signupWithValidation } from "@/api/actions/auth";
+import { validateRegisterForm } from "@/api/actions/auth";
 import Input from "@/components/Input";
-import React, { useState, startTransition } from "react";
+import React from "react";
 
-import { useActionState, useFormStatus } from "react";
-
+import { useActionState } from "react";
 import Image from "next/image";
 
-import registerImage from "../../../public/registerImg.jpg";
+import registerImage from "@/assets/RegisterImg.jpg";
 
 // register page
 function Register() {
-  const [state, action] = useActionState(signupWithValidation, undefined);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [image, setImage] = useState(null);
+  const [state, action, isPending] = useActionState(
+    validateRegisterForm,
+    undefined
+  );
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-
-    startTransition(async () => {
-      const validationResult = await action(formData);
-    });
-    if (image) {
-      formData.append("image", image);
-    }
-
-    await register(formData);
-  };
   return (
     <div className="">
-      <form onSubmit={handleSubmit} className="flex flex-col">
+      <form action={action} className="flex flex-col">
         <div className="flex items-center justify-center">
           <div className="flex h-screen w-screen">
             <div className="w-3/5 bg-green-200 relative w-full overflow-hidden group">
@@ -61,8 +44,6 @@ function Register() {
                 type="text"
                 placeholder="Username"
                 name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
                 required
               />
               {state?.errors?.name && <p>{state.errors.name}</p>}
@@ -74,8 +55,6 @@ function Register() {
                 type="password"
                 placeholder="Password"
                 name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
               />
               {state?.errors?.password && (
@@ -88,23 +67,21 @@ function Register() {
                   </ul>
                 </div>
               )}
-
-              <input
-                className="pt-4"
-                name="image"
-                type="file"
-                onChange={(e) => setImage(e.target.files[0])}
-                required
-              />
+              {state?.error && (
+                <div>
+                  <p>{state.error}</p>
+                </div>
+              )}
+              <p className="pt-4 text-xs">Profile picture:</p>
+              <input className="" name="image" type="file" required />
 
               <div className="pt-4">
-                {" "}
                 <button
                   className="bg-red-600 hover:bg-red-800 transition duration-200 text-[--background] w-[100%] m-auto rounded-md p-2"
                   type="submit"
                 >
-                  Register
-                </button>{" "}
+                  {isPending ? "Registering..." : "Register"}
+                </button>
               </div>
 
               <div className="p-2">
@@ -112,7 +89,7 @@ function Register() {
                   Already a user?{" "}
                   <a href="./login">
                     <span className="text-red-400 hover:text-red-800 transition duration-200">
-                      login here
+                      Login here
                     </span>
                   </a>
                 </p>
