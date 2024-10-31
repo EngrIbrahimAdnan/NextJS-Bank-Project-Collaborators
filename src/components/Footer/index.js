@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="bg-gray-800 text-gray-300 text-sm py-5 mt-10">
+    <div className="bg-gray-800 text-gray-300 text-sm py-5 ">
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="grid grid-cols-1  md:grid-cols-5 gap-2">
           {/* Personal Col */}
@@ -28,7 +28,7 @@ export default function Footer() {
             </a>
           </div>
           {/* Private Col */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 mt-4 md:mt-0">
             <h4 className="text-white font-bold">PRIVATE</h4>
             <a href="/" className="hover:text-gray-100">
               Account
@@ -47,7 +47,7 @@ export default function Footer() {
             </a>
           </div>
           {/* About Failaka Col */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 mt-4 md:mt-0">
             <h4 className="text-white font-bold">ABOUT FAILAKA</h4>
             <a href="/" className="hover:text-gray-100">
               Failaka Group
@@ -62,7 +62,7 @@ export default function Footer() {
               Investments
             </a>
           </div>
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 mt-4 md:mt-0">
             <h4 className="text-white font-bold">Connect with us :</h4>
             {/*  Social Media icons */}
             <div className="flex space-x-2 mt-5">
@@ -98,7 +98,7 @@ export default function Footer() {
               />
             </div>
           </div>
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 mt-4 md:mt-0">
             <h4 className="text-white font-bold">Download The Failaka App</h4>
             {/* Failaka app download links */}
             <div className="flex mt-5 size-auto flex-wrap">
@@ -110,12 +110,12 @@ export default function Footer() {
               <img
                 src="https://boubyan.bankboubyan.com/static/boubyan/images/mob/android_footer.23aa5df21554.png"
                 alt="Download on Android"
-                className="hover:opacity-75 w-40 mt-2"
+                className="hover:opacity-75 w-40 md:mt-2"
               />
               <img
                 src="https://boubyan.bankboubyan.com/static/boubyan/images/mob/huawei_footer.a238b880a2b7.png"
                 alt="Download on Huawei"
-                className="hover:opacity-75 w-40 mt-2"
+                className="hover:opacity-75 w-40 md:mt-2"
               />
             </div>
           </div>
